@@ -1,7 +1,8 @@
 --==================================================
 -- 🐺 DOUBLEX 🐺
--- GUI MOBILE V6
+-- GUI MOBILE V6 + 📜 QUEST SYSTEM
 -- UM ÚNICO LOCALSCRIPT
+-- StarterPlayer > StarterPlayerScripts
 --==================================================
 
 local Players = game:GetService("Players")
@@ -21,288 +22,181 @@ Gui.IgnoreGuiInset = true
 Gui.Parent = Player:WaitForChild("PlayerGui")
 
 
+local Bubble = Instance.new("TextButton")
+Bubble.Size = UDim2.new(0,65,0,65)
+Bubble.Position = UDim2.new(0,25,0.5,0)
+Bubble.Text = "🐺"
+Bubble.TextScaled = true
+Bubble.Parent = Gui
 
---==================================================
--- FUNÇÃO ARRASTAR
---==================================================
+
+local Panel = Instance.new("Frame")
+Panel.Size = UDim2.new(0,300,0,380)
+Panel.Position = UDim2.new(0,120,0.25,0)
+Panel.Visible = false
+Panel.Parent = Gui
+
+
+local Header = Instance.new("TextButton")
+Header.Size = UDim2.new(1,0,0,50)
+Header.Text = "🐺 DOUBLEX 🐺"
+Header.TextScaled = true
+Header.BackgroundTransparency = 1
+Header.Parent = Panel
+
+
+local Minimize = Instance.new("TextButton")
+Minimize.Size = UDim2.new(0,40,0,40)
+Minimize.Position = UDim2.new(1,-45,0,5)
+Minimize.Text = "−"
+Minimize.Parent = Panel
+
+
+local Status = Instance.new("TextLabel")
+Status.Size = UDim2.new(1,-20,0,40)
+Status.Position = UDim2.new(0,10,0,60)
+Status.Text = "Status: Pronto"
+Status.TextScaled = true
+Status.BackgroundTransparency = 1
+Status.Parent = Panel
+
+
+local function CreateButton(Text,Y)
+	local B = Instance.new("TextButton")
+	B.Size = UDim2.new(0.8,0,0,45)
+	B.Position = UDim2.new(0.1,0,0,Y)
+	B.Text = Text
+	B.TextScaled = true
+	B.Parent = Panel
+	return B
+end
+
+
+local QuestButton = CreateButton("📜 QUEST",110)
+local AttackButton = CreateButton("⚔ ATAQUE",165)
+local TravelButton = CreateButton("🚢 VIAGEM",220)
+local ConfigButton = CreateButton("⚙ CONFIG",275)
+
+
+Bubble.MouseButton1Click:Connect(function()
+	Bubble.Visible = false
+	Panel.Visible = true
+end)
+
+
+Minimize.MouseButton1Click:Connect(function()
+	Panel.Visible = false
+	Bubble.Visible = true
+end)
+
 
 local function DragObject(Object, MoveObject)
 
 	local Dragging = false
-	local StartPos
-	local StartObjectPos
-
+	local Start
+	local Position
 
 	Object.InputBegan:Connect(function(Input)
-
 		if Input.UserInputType == Enum.UserInputType.Touch then
-
 			Dragging = true
-
-			StartPos = Input.Position
-			StartObjectPos = MoveObject.Position
-
+			Start = Input.Position
+			Position = MoveObject.Position
 		end
-
 	end)
-
-
 
 	UserInputService.InputChanged:Connect(function(Input)
-
 		if Dragging and Input.UserInputType == Enum.UserInputType.Touch then
+			local Delta = Input.Position - Start
 
-			local Delta = Input.Position - StartPos
-
-
-			MoveObject.Position =
-				UDim2.new(
-					StartObjectPos.X.Scale,
-					StartObjectPos.X.Offset + Delta.X,
-
-					StartObjectPos.Y.Scale,
-					StartObjectPos.Y.Offset + Delta.Y
-				)
-
+			MoveObject.Position = UDim2.new(
+				Position.X.Scale,
+				Position.X.Offset + Delta.X,
+				Position.Y.Scale,
+				Position.Y.Offset + Delta.Y
+			)
 		end
-
 	end)
 
-
-
-	UserInputService.InputEnded:Connect(function(Input)
-
-		if Input.UserInputType == Enum.UserInputType.Touch then
-
-			Dragging = false
-
-		end
-
+	UserInputService.InputEnded:Connect(function()
+		Dragging = false
 	end)
-
 end
 
-
-
---==================================================
--- BOLHA
---==================================================
-
-local Bubble = Instance.new("TextButton")
-
-Bubble.Size =
-	UDim2.new(0,65,0,65)
-
-Bubble.Position =
-	UDim2.new(0,30,0.5,0)
-
-Bubble.Text =
-	"🐺"
-
-Bubble.TextScaled = true
-
-Bubble.Parent = Gui
-
-
-
-local BubbleCorner = Instance.new("UICorner")
-BubbleCorner.CornerRadius = UDim.new(1,0)
-BubbleCorner.Parent = Bubble
-
-
-
---==================================================
--- PAINEL
---==================================================
-
-local Panel = Instance.new("Frame")
-
-Panel.Size =
-	UDim2.new(0,300,0,380)
-
-Panel.Position =
-	UDim2.new(0,120,0.25,0)
-
-Panel.Visible = false
-
-Panel.Parent = Gui
-
-
-
-local PanelCorner = Instance.new("UICorner")
-PanelCorner.CornerRadius = UDim.new(0,15)
-PanelCorner.Parent = Panel
-
-
-
---==================================================
--- BARRA SUPERIOR ARRASTÁVEL
---==================================================
-
-local Header = Instance.new("TextButton")
-
-Header.Size =
-	UDim2.new(1,0,0,50)
-
-Header.Position =
-	UDim2.new(0,0,0,0)
-
-Header.Text =
-	"🐺 DOUBLEX 🐺"
-
-Header.TextScaled = true
-
-Header.BackgroundTransparency = 1
-
-Header.Parent = Panel
-
-
-
---==================================================
--- MINIMIZAR
---==================================================
-
-local Minimize = Instance.new("TextButton")
-
-Minimize.Size =
-	UDim2.new(0,40,0,40)
-
-Minimize.Position =
-	UDim2.new(1,-45,0,5)
-
-Minimize.Text =
-	"−"
-
-Minimize.TextScaled = true
-
-Minimize.Parent = Panel
-
-
-
---==================================================
--- STATUS
---==================================================
-
-local Status = Instance.new("TextLabel")
-
-Status.Size =
-	UDim2.new(1,-20,0,35)
-
-Status.Position =
-	UDim2.new(0,10,0,60)
-
-Status.Text =
-	"Status: Pronto"
-
-Status.TextScaled = true
-
-Status.BackgroundTransparency = 1
-
-Status.Parent = Panel
-
-
-
---==================================================
--- BOTÕES
---==================================================
-
-local function CreateButton(Text,Y)
-
-	local Button = Instance.new("TextButton")
-
-	Button.Size =
-	UDim2.new(0.8,0,0,45)
-
-	Button.Position =
-	UDim2.new(0.1,0,0,Y)
-
-	Button.Text =
-	Text
-
-	Button.TextScaled = true
-
-	Button.Parent = Panel
-
-	return Button
-
-end
-
-
-
-local Quest =
-	CreateButton("📜 QUEST",110)
-
-
-local Attack =
-	CreateButton("⚔ ATAQUE",165)
-
-
-local Travel =
-	CreateButton("🚢 VIAGEM",220)
-
-
-local Config =
-	CreateButton("⚙ CONFIG",275)
-
-
-
---==================================================
--- ABRIR / FECHAR
---==================================================
-
-Bubble.MouseButton1Click:Connect(function()
-
-	Bubble.Visible = false
-
-	Panel.Visible = true
-
-end)
-
-
-
-Minimize.MouseButton1Click:Connect(function()
-
-	Panel.Visible = false
-
-	Bubble.Visible = true
-
-end)
-
-
-
---==================================================
--- DRAG
---==================================================
 
 DragObject(Bubble, Bubble)
-
 DragObject(Header, Panel)
 
 
 
 --==================================================
--- TESTE
+-- 📜 QUEST SYSTEM
 --==================================================
 
-Quest.MouseButton1Click:Connect(function()
-	Status.Text = "📜 Quest"
+local QuestData = {
+
+	{Level=0, Quest="BanditQuest", Enemy="Bandit", NPC="Island Quest Giver"},
+	{Level=10, Quest="JungleQuest", Enemy="Monkey", NPC="Jungle Quest Giver"},
+	{Level=15, Quest="JungleQuest", Enemy="Gorilla", NPC="Jungle Quest Giver"},
+	{Level=35, Quest="PirateQuest", Enemy="Pirate", NPC="Pirate Quest Giver"},
+	{Level=45, Quest="PirateQuest", Enemy="Brute", NPC="Pirate Quest Giver"}
+
+}
+
+
+local QuestFrame = Instance.new("ScrollingFrame")
+QuestFrame.Size = UDim2.new(0.9,0,0,180)
+QuestFrame.Position = UDim2.new(0.05,0,0,110)
+QuestFrame.Visible = false
+QuestFrame.Parent = Panel
+
+
+local Layout = Instance.new("UIListLayout")
+Layout.Parent = QuestFrame
+Layout.Padding = UDim.new(0,5)
+
+
+for _,Data in ipairs(QuestData) do
+
+	local Button = Instance.new("TextButton")
+
+	Button.Size = UDim2.new(1,0,0,40)
+	Button.Text = "Lv "..Data.Level.." | "..Data.Enemy
+	Button.TextScaled = true
+	Button.Parent = QuestFrame
+
+
+	Button.MouseButton1Click:Connect(function()
+
+		Status.Text =
+			"Quest: "..Data.Enemy..
+			"\nNPC: "..Data.NPC
+
+		print("Quest selecionada:",Data.Quest)
+
+	end)
+
+end
+
+
+QuestButton.MouseButton1Click:Connect(function()
+
+	QuestFrame.Visible = true
+	Status.Text = "📜 Escolha uma Quest"
+
 end)
 
 
-Attack.MouseButton1Click:Connect(function()
+AttackButton.MouseButton1Click:Connect(function()
 	Status.Text = "⚔ Ataque"
 end)
 
-
-Travel.MouseButton1Click:Connect(function()
+TravelButton.MouseButton1Click:Connect(function()
 	Status.Text = "🚢 Viagem"
 end)
 
-
-Config.MouseButton1Click:Connect(function()
+ConfigButton.MouseButton1Click:Connect(function()
 	Status.Text = "⚙ Config"
 end)
 
 
-
-print("🐺 DOUBLEX V6 carregado")
+print("🐺 DOUBLEX V6 + QUEST carregado")
